@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GenAI Triage · Facilitator Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F0EBF9;
+      color: #1A1A2E;
+      padding: 40px 24px 80px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* PAGE HEADER */
+    .page-hdr {
+      background: #4E2A84;
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin-bottom: 40px;
+    }
+    .page-eye {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #C5B3E6;
+      margin-bottom: 8px;
+    }
+    .page-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    /* CARD BLOCK */
+    .card-block {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(78,42,132,0.08);
+    }
+
+    .card-hdr {
+      background: #4E2A84;
+      padding: 20px 28px;
+    }
+    .card-eye {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #C5B3E6;
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+      line-height: 1.25;
+    }
+
+    .card-body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* QUESTION BOX */
+    .q-box {
+      background: #F0EBF9;
+      border-left: 4px solid #4E2A84;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+    }
+    .q-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #7255A3;
+      margin-bottom: 6px;
+    }
+    .q-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1A1A2E;
+      line-height: 1.5;
+    }
+
+    /* SCORING GUIDE */
+    .score-row {
+      display: flex;
+      gap: 10px;
+    }
+    .score-chip {
+      flex: 1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .score-chip.hi { background: #FEF0F0; border-top: 3px solid #C0392B; }
+    .score-chip.md { background: #FEF9E7; border-top: 3px solid #D4851A; }
+    .score-chip.lo { background: #E8F5EE; border-top: 3px solid #2D8A4E; }
+    .score-chip.ex { background: #F0EBF9; border-top: 3px solid #4E2A84; }
+    .chip-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .score-chip.hi .chip-lbl { color: #C0392B; }
+    .score-chip.md .chip-lbl { color: #D4851A; }
+    .score-chip.lo .chip-lbl { color: #2D8A4E; }
+    .score-chip.ex .chip-lbl { color: #4E2A84; }
+    .chip-val {
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .score-chip.hi .chip-val { color: #C0392B; }
+    .score-chip.md .chip-val { color: #D4851A; }
+    .score-chip.lo .chip-val { color: #2D8A4E; }
+    .score-chip.ex .chip-val { color: #4E2A84; }
+
+    /* ANSWER SECTION */
+    .ans-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ans-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #E8602C;
+    }
+    .ans-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .ans-bullet {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: #E8602C;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+      margin-top: 1px;
+    }
+    .ans-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #1A1A2E;
+    }
+    .ans-text strong {
+      color: #4E2A84;
+      font-weight: 600;
+    }
+
+    /* FACILITATOR NOTE */
+    .fac-note {
+      background: #1A1A2E;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .fac-note-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #E8602C;
+      margin-bottom: 6px;
+    }
+    .fac-note-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.75);
+    }
+    .fac-note-text strong {
+      color: white;
+      font-weight: 600;
+    }
+
+    /* MATRIX HINT */
+    .matrix-hint {
+      background: #F0EBF9;
+      border-radius: 8px;
+      padding: 14px 18px;
+      border: 1px solid #C5B3E6;
+    }
+    .matrix-hint-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #7255A3;
+      margin-bottom: 6px;
+    }
+    .matrix-hint-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #4E2A84;
+    }
+
+    /* EXERCISE NOTE */
+    .ex-hint {
+      background: #FFF8F5;
+      border: 1px solid #E8602C;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .ex-hint-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #E8602C;
+      margin-bottom: 6px;
+    }
+    .ex-hint-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #1A1A2E;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #E8E0F5;
+    }
+
+    /* FOOTER */
+    .page-ftr {
+      text-align: center;
+      font-size: 11px;
+      color: #7255A3;
+      margin-top: 48px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-hdr">
+  <div class="page-eye">CX GenAI Triage Workshop · Internal Use Only</div>
+  <div class="page-title">Facilitator Guide: Case Card Answers</div>
+  <div class="page-sub">Sample answers, scoring rationale, and facilitation notes for each case card debate question. Not for distribution. Use as a reference during group debrief.</div>
+</div>
+
+
+<!-- ══════════════════════════
+     CARD 01 · AIR CANADA
+══════════════════════════ -->
+<div class="card-block">
+  <div class="card-hdr">
+    <div class="card-eye">Card 01 · Loss of Control · Air Canada · 2024</div>
+    <div class="card-title">"You own what your bot says."</div>
+  </div>
+  <div class="card-body">
+
+    <div class="q-box">
+      <div class="q-lbl">Debate question</div>
+      <div class="q-text">"What one guardrail would have prevented this - and who in your organisation owns that decision?"</div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-chip hi"><div class="chip-lbl">Emotional State</div><div class="chip-val">HIGH</div></div>
+      <div class="score-chip md"><div class="chip-lbl">AI Tolerance</div><div class="chip-val">MED</div></div>
+      <div class="score-chip hi"><div class="chip-lbl">Compliance</div><div class="chip-val">HIGH</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ans-section">
+      <div class="ans-lbl">Sample answers: the guardrail</div>
+      <div class="ans-item">
+        <div class="ans-bullet">1</div>
+        <div class="ans-text"><strong>Retrieval-only policy responses.</strong> The AI should only answer policy questions by retrieving from a verified, version-controlled policy document. If the fare policy isn't in the database, the answer is: "I don't have that information - please speak with an agent." No retrieval, no answer. This is the most direct fix.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">2</div>
+        <div class="ans-text"><strong>Confidence threshold with escalation.</strong> If the model generates an answer without grounding it in a retrieved source, it routes to a human agent instead of responding. The bot admits uncertainty rather than filling the gap with a plausible-sounding hallucination.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">3</div>
+        <div class="ans-text"><strong>No financial commitments without human sign-off.</strong> Any response that implies a refund, discount, or booking modification triggers a human handoff. The AI can gather context, it cannot make promises.</div>
+      </div>
+    </div>
+
+    <div class="ans-section">
+      <div class="ans-lbl">Sample answers: who owns it</div>
+      <div class="ans-item">
+        <div class="ans-bullet">A</div>
+        <div class="ans-text"><strong>The gap is almost always ownership.</strong> Product owns the feature. Legal owns the liability. CX owns the customer experience. Nobody owns "what the AI is allowed to say about policy." Push the room to name the role - not the department.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">B</div>
+        <div class="ans-text"><strong>Strong answer:</strong> the AI product owner, with a legal review gate before any policy-adjacent capability ships. Weaker answer: Legal alone - they'll block everything. The sweet spot is a product owner who is accountable for both the feature and its guardrails.</div>
+      </div>
+    </div>
+
+    <div class="matrix-hint">
+      <div class="matrix-hint-lbl">Matrix placement</div>
+      <div class="matrix-hint-text">High emotional state (bereavement) + high compliance (legal liability created) = bottom-left of the matrix. This is a case where AI should have a very narrow scope or not operate autonomously at all. The guardrail isn't a nice-to-have - the deployment decision itself was the failure.</div>
+    </div>
+
+    <div class="fac-note">
+      <div class="fac-note-lbl">Facilitator note</div>
+      <div class="fac-note-text">The most common room answer is "a disclaimer." Push back: <strong>Air Canada had a disclaimer. The court ignored it.</strong> Disclaimers are not guardrails. Ask the room what a guardrail actually is - something that prevents the wrong output from reaching the customer, not something that excuses it after the fact.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════
+     CARD 02 · DPD
+══════════════════════════ -->
+<div class="card-block">
+  <div class="card-hdr">
+    <div class="card-eye">Card 02 · Guardrail Failure · DPD · UK · 2024</div>
+    <div class="card-title">"Your brand. Your channel. No override."</div>
+  </div>
+  <div class="card-body">
+
+    <div class="q-box">
+      <div class="q-lbl">Debate question</div>
+      <div class="q-text">"Who is responsible for defining what a branded AI channel is not allowed to do - and does that person exist at your organisation?"</div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-chip lo"><div class="chip-lbl">Emotional State</div><div class="chip-val">LOW</div></div>
+      <div class="score-chip hi"><div class="chip-lbl">AI Tolerance</div><div class="chip-val">HIGH</div></div>
+      <div class="score-chip md"><div class="chip-lbl">Compliance</div><div class="chip-val">MED</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ans-section">
+      <div class="ans-lbl">Sample answers: who is responsible</div>
+      <div class="ans-item">
+        <div class="ans-bullet">1</div>
+        <div class="ans-text"><strong>In most organisations, no one explicitly owns this.</strong> Brand/Marketing owns what the brand says. Legal owns what it must not say. Product owns how the AI works. The gap is the intersection: what the AI is not allowed to do across all edge cases, regardless of what a user tries.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">2</div>
+        <div class="ans-text"><strong>Who should own it:</strong> the Chief Marketing Officer or Chief Brand Officer, with Legal as a required co-signer. The system prompt is a brand document. Treat it like one.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">3</div>
+        <div class="ans-text"><strong>The fix:</strong> a documented "not permitted" list - topics, tones, content types - reviewed by Brand and Legal, version-controlled, and built into the system prompt. Not a one-time setup. A maintained policy document.</div>
+      </div>
+    </div>
+
+    <div class="ans-section">
+      <div class="ans-lbl">Does that person exist?</div>
+      <div class="ans-item">
+        <div class="ans-bullet">A</div>
+        <div class="ans-text"><strong>Ask the room directly.</strong> In most companies the answer is no - or there are three people who each think someone else owns it. The value of the question is the discomfort it surfaces, not the answer.</div>
+      </div>
+    </div>
+
+    <div class="matrix-hint">
+      <div class="matrix-hint-lbl">Matrix placement</div>
+      <div class="matrix-hint-text">Low emotional state (parcel tracking) + high AI tolerance (transactional, low stakes) = top-right. This should have been the safest quadrant to operate in. The failure wasn't in the use case - it was in the absence of any brand governance layer. The quadrant was right. The deployment was underprepared.</div>
+    </div>
+
+    <div class="fac-note">
+      <div class="fac-note-lbl">Facilitator note</div>
+      <div class="fac-note-text">DPD is a useful foil to Air Canada because the stakes were objectively lower - no bereavement, no financial harm, just an embarrassing poem. <strong>But the reputational damage was real and immediate.</strong> Ask the room: does low emotional state mean low risk? Not if the brand is on the channel. The channel is the brand.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════
+     CARD 03 · NYC MYCITY AI
+══════════════════════════ -->
+<div class="card-block">
+  <div class="card-hdr">
+    <div class="card-eye">Card 03 · Regulatory Exposure · NYC MyCity AI · 2024</div>
+    <div class="card-title">"Official channel. Official liability."</div>
+  </div>
+  <div class="card-body">
+
+    <div class="q-box">
+      <div class="q-lbl">Debate question</div>
+      <div class="q-text">"How do you communicate AI limitations without destroying trust in the official channel - or the brand behind it?"</div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-chip hi"><div class="chip-lbl">Emotional State</div><div class="chip-val">HIGH</div></div>
+      <div class="score-chip lo"><div class="chip-lbl">AI Tolerance</div><div class="chip-val">LOW</div></div>
+      <div class="score-chip hi"><div class="chip-lbl">Compliance</div><div class="chip-val">HIGH</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ans-section">
+      <div class="ans-lbl">Sample answers</div>
+      <div class="ans-item">
+        <div class="ans-bullet">1</div>
+        <div class="ans-text"><strong>Progressive disclosure at the point of answer, not upfront.</strong> Rather than a blanket disclaimer before the session begins ("this AI may be wrong"), surface uncertainty at the response level - "this is general guidance, verify with the relevant regulation at [link]." The user gets the information and the honest caveat at the same moment, not before they've asked anything.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">2</div>
+        <div class="ans-text"><strong>Cite the authoritative source, don't paraphrase it.</strong> The AI links to the actual regulation rather than summarising it. Trust shifts to the primary source. The AI becomes a navigator, not a decision-maker. If the link is wrong, that's a different and much easier problem to fix.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">3</div>
+        <div class="ans-text"><strong>Scope narrowing.</strong> Only answer within a verified, tested question set. Anything outside scope routes to a human or an official contact. The AI does less, but everything it does is reliable. Narrower deployment, maintained trust.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">4</div>
+        <div class="ans-text"><strong>The tension the question is really asking about:</strong> disclaim everything and you've destroyed the value proposition; disclaim nothing and you've created liability. The answer is to scope the AI tightly enough that you can stand behind what it says - and communicate that scope clearly.</div>
+      </div>
+    </div>
+
+    <div class="matrix-hint">
+      <div class="matrix-hint-lbl">Matrix placement</div>
+      <div class="matrix-hint-text">High emotional state (regulatory compliance for businesses) + low AI tolerance + high compliance context = bottom-left. The framework would have flagged this as a deploy-with-extreme-caution scenario before launch. The official channel branding amplified the problem - it implied authority the model couldn't deliver.</div>
+    </div>
+
+    <div class="fac-note">
+      <div class="fac-note-lbl">Facilitator note</div>
+      <div class="fac-note-text">This case pairs naturally with Card 04 (CRA Charlie). Both are government, both are high-compliance. <strong>Ask the room: what did NYC do differently from CRA - and did it help?</strong> NYC had no scope limits and no source linking. CRA links to sources and explicitly limits what Charlie can handle. Different outcomes from the same starting point.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════
+     CARD 04 · CRA CHARLIE (EXERCISE)
+══════════════════════════ -->
+<div class="card-block">
+  <div class="card-hdr">
+    <div class="card-eye">Card 04 · Framework Exercise · Canada Revenue Agency</div>
+    <div class="card-title">"Charlie." Score it. Plot it. Defend it.</div>
+  </div>
+  <div class="card-body">
+
+    <div class="q-box">
+      <div class="q-lbl">Exercise prompt</div>
+      <div class="q-text">"Score Charlie on the three factors. Plot it on the matrix. Defend your quadrant. Is the framework giving you a clear answer - or exposing a trade-off?"</div>
+    </div>
+
+    <div class="ex-hint">
+      <div class="ex-hint-lbl">This is an exercise card - no fixed answer</div>
+      <div class="ex-hint-text">There is no single correct quadrant for Charlie. The exercise works because reasonable people will score it differently. The facilitation goal is to surface the reasoning, not achieve consensus. The notes below are a scoring rationale you can use if the room gets stuck, not the answer key.</div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ans-section">
+      <div class="ans-lbl">Scoring rationale if the room needs a nudge</div>
+      <div class="ans-item">
+        <div class="ans-bullet">1</div>
+        <div class="ans-text"><strong>Emotional State: HIGH.</strong> Tax is one of the highest-anxiety topics in public life. Citizens interacting with CRA are often stressed, confused, or worried about making a costly mistake. The emotional stakes are high regardless of how simple the question appears.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">2</div>
+        <div class="ans-text"><strong>AI Tolerance: LOW to MED.</strong> Citizens may not trust an AI to answer official tax questions accurately - and the Auditor General's test (2 of 6 correct) supports that skepticism. Some participants who have used Charlie may rate it higher based on experience. Both are valid.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">3</div>
+        <div class="ans-text"><strong>Compliance: HIGH.</strong> CRA is a federal regulatory body. Incorrect tax guidance has real financial and legal consequences. This is about as high a compliance context as a public-facing AI can operate in.</div>
+      </div>
+    </div>
+
+    <div class="matrix-hint">
+      <div class="matrix-hint-lbl">Likely matrix placement</div>
+      <div class="matrix-hint-text">Most groups will land Charlie in the bottom-left quadrant (high emotional state, low-to-mid AI tolerance) with a note that compliance pushes it further toward caution. The interesting discussion: Charlie has real guardrails - scope limits, source linking, no personal data. Does the framework recognise good intent even when accuracy is mixed? That's the trade-off the question is asking about.</div>
+    </div>
+
+    <div class="ans-section">
+      <div class="ans-lbl">What to listen for from the room</div>
+      <div class="ans-item">
+        <div class="ans-bullet">A</div>
+        <div class="ans-text"><strong>The framework is giving a clear answer (caution).</strong> Valid. Bottom-left is a legitimate conclusion given the scoring. Ask: given that, should Charlie exist at all? Or is a limited, clearly-scoped chatbot better than nothing?</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">B</div>
+        <div class="ans-text"><strong>The framework is exposing a trade-off.</strong> Also valid. Charlie's guardrails (source linking, scope limits) are the right moves. The accuracy gap is a maturity problem, not a deployment philosophy problem. The question is whether you deploy now and improve, or wait.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">C</div>
+        <div class="ans-text"><strong>If someone has used Charlie:</strong> their direct experience is data. Ask them to score it from that experience rather than from the context on the card. Compare the two scores - they may differ. That's the point.</div>
+      </div>
+    </div>
+
+    <div class="fac-note">
+      <div class="fac-note-lbl">Facilitator note</div>
+      <div class="fac-note-text">Charlie is Canadian and in the room. <strong>Treat it with respect.</strong> The CRA is a serious institution doing a difficult thing in public. The exercise is not "roast the government chatbot" - it's "apply the framework to a real, live, ambiguous case that has no clean answer." Frame it that way and the room will engage more honestly.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════
+     CARD 05 · KLARNA
+══════════════════════════ -->
+<div class="card-block">
+  <div class="card-hdr">
+    <div class="card-eye">Card 05 · Misaligned Objective · Klarna · 2024 · Fintech</div>
+    <div class="card-title">"The AI did exactly what it was told."</div>
+  </div>
+  <div class="card-body">
+
+    <div class="q-box">
+      <div class="q-lbl">Debate question</div>
+      <div class="q-text">"The AI succeeded at its objective. Who owns the failure: the model, the product team, or the executive who approved the business case?"</div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-chip hi"><div class="chip-lbl">Emotional State</div><div class="chip-val">HIGH</div></div>
+      <div class="score-chip md"><div class="chip-lbl">AI Tolerance</div><div class="chip-val">MED</div></div>
+      <div class="score-chip md"><div class="chip-lbl">Compliance</div><div class="chip-val">MED</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ans-section">
+      <div class="ans-lbl">Sample answers: who owns the failure</div>
+      <div class="ans-item">
+        <div class="ans-bullet">1</div>
+        <div class="ans-text"><strong>Not the model.</strong> The model did exactly what it was optimised to do: resolve tickets quickly and cheaply. You cannot blame a system for succeeding at its stated objective. This should be obvious but say it clearly - the room sometimes goes here first.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">2</div>
+        <div class="ans-text"><strong>The product team defined the wrong success metrics.</strong> Speed and cost reduction were measurable. Customer experience was not included in the success criteria. If CSAT had been a required metric alongside resolution time, the system would have been designed differently - or the degradation would have been caught sooner.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">3</div>
+        <div class="ans-text"><strong>The executive who approved the business case.</strong> The strongest answer. The OKRs were approved at leadership level. The business case framed success as cost savings. No one at that level asked: "what does the customer need from this interaction, and how will we know if we're delivering it?" That question should have been non-negotiable before approval.</div>
+      </div>
+      <div class="ans-item">
+        <div class="ans-bullet">4</div>
+        <div class="ans-text"><strong>The real lesson:</strong> AI amplifies your objectives, not your intentions. If your objective is cost, AI will optimise for cost. If you also intended to maintain customer satisfaction, you needed to build that into the objective - not assume it would follow.</div>
+      </div>
+    </div>
+
+    <div class="matrix-hint">
+      <div class="matrix-hint-lbl">Matrix placement</div>
+      <div class="matrix-hint-text">Financial services support: high emotional state (money, billing, disputes) + mid AI tolerance + mid compliance. The framework would have placed this in a cautious quadrant requiring human escalation paths for complex or emotionally charged contacts. What Klarna built had no such escalation - everything went to AI by default. The quadrant wasn't wrong. The implementation ignored what the quadrant implied.</div>
+    </div>
+
+    <div class="fac-note">
+      <div class="fac-note-lbl">Facilitator note</div>
+      <div class="fac-note-text">This is the most relatable card for most rooms. <strong>Almost every organisation has approved a project where the business case metrics were right but the customer experience metrics were missing.</strong> Ask: "Has anyone in this room approved - or been asked to approve - something like this?" The silence (or the nods) tells you everything. Klarna is not exceptional. They just did it at scale with AI.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="page-ftr">
+  CX GenAI Triage · Facilitator Guide · Internal use only · Not for distribution<br>
+  © 2026 AbilityMatrix Innovation Consulting Inc.
+</div>
+
+</body>
+</html>

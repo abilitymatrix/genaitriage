@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CX GenAI Triage Canvas · 18x24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: 609.6mm 457.2mm;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box; margin: 0; padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      width: 609.6mm;
+      height: 457.2mm;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #1A1A2E;
+    }
+
+    /* ── HEADER ── */
+    .hdr {
+      background: #4E2A84;
+      height: 18mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8mm;
+      flex-shrink: 0;
+    }
+    .hdr-title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+      font-size: 8.5mm;
+      color: white;
+      letter-spacing: -0.3mm;
+      line-height: 1;
+    }
+    .hdr-title span { color: #E8602C; }
+    .hdr-sub {
+      font-size: 3.2mm;
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+      letter-spacing: 0.4mm;
+      margin-top: 1mm;
+    }
+    .hdr-right {
+      text-align: right;
+      font-family: 'Raleway', sans-serif;
+      font-size: 3.2mm;
+      font-weight: 700;
+      color: #C5B3E6;
+      letter-spacing: 0.3mm;
+      line-height: 1.6;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── LEFT: SCORE ZONE ── */
+    .score-zone {
+      width: 178mm;
+      padding: 5mm 5mm 5mm 7mm;
+      border-right: 0.5mm solid #E8E0F5;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5mm;
+      flex-shrink: 0;
+    }
+
+    .zone-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 2.8mm;
+      font-weight: 800;
+      letter-spacing: 1.2mm;
+      text-transform: uppercase;
+      color: #E8602C;
+    }
+    .zone-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 6mm;
+      font-weight: 900;
+      color: #4E2A84;
+      line-height: 1.1;
+    }
+
+    /* Factor cards */
+    .factor {
+      background: #F0EBF9;
+      border-radius: 2mm;
+      padding: 2.5mm 3.5mm;
+      border-left: 1.5mm solid #4E2A84;
+    }
+    .factor.f2 { border-left-color: #7255A3; }
+    .factor.f3 { border-left-color: #C5B3E6; }
+    .factor-num {
+      font-size: 2.4mm;
+      font-weight: 800;
+      color: #E8602C;
+      letter-spacing: 0.4mm;
+      text-transform: uppercase;
+      margin-bottom: 0.5mm;
+    }
+    .factor-q {
+      font-size: 3.2mm;
+      font-weight: 700;
+      color: #4E2A84;
+      margin-bottom: 1.5mm;
+      line-height: 1.3;
+    }
+    .factor-scale {
+      display: flex;
+      gap: 2.5mm;
+      align-items: center;
+    }
+    .scale-item {
+      display: flex;
+      align-items: center;
+      gap: 1mm;
+      font-size: 2.7mm;
+      color: #5A5A72;
+    }
+    .scale-box {
+      width: 3.5mm;
+      height: 3.5mm;
+      border: 0.4mm solid #7255A3;
+      border-radius: 0.5mm;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* Scoring table */
+    .score-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .score-table th {
+      background: #4E2A84;
+      color: white;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 2.5mm;
+      letter-spacing: 0.2mm;
+      padding: 1.5mm 2mm;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .score-table th:first-child { text-align: left; }
+    .score-table td {
+      border: 0.3mm solid #E8E0F5;
+      padding: 1.8mm 2mm;
+      font-size: 2.8mm;
+      color: #5A5A72;
+      vertical-align: middle;
+      height: 7mm;
+    }
+    .score-table td.sc { text-align: center; width: 11mm; }
+    .score-table tr:nth-child(even) td { background: #F8F5FC; }
+
+    .legend {
+      font-size: 2.6mm;
+      color: #5A5A72;
+      line-height: 1.7;
+      padding: 2mm 0 0;
+      border-top: 0.3mm solid #E8E0F5;
+    }
+    .legend strong { color: #4E2A84; }
+
+    .prompt-box {
+      background: #E8602C;
+      border-radius: 2mm;
+      padding: 2.5mm 3.5mm;
+      margin-top: auto;
+    }
+    .prompt-box p {
+      font-family: 'Raleway', sans-serif;
+      font-size: 3.2mm;
+      font-weight: 800;
+      color: white;
+      line-height: 1.5;
+    }
+
+    /* ── RIGHT: MATRIX ZONE ── */
+    .matrix-zone {
+      flex: 1;
+      padding: 5mm 7mm 5mm 6mm;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .matrix-wrap {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 7mm 1fr 1fr;
+      grid-template-rows: 1fr 1fr 7mm;
+      gap: 3mm;
+    }
+
+    .mx-y {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mx-y span {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 2.7mm;
+      font-weight: 700;
+      color: #4E2A84;
+      letter-spacing: 0.8mm;
+      text-transform: uppercase;
+    }
+
+    .mcell {
+      border-radius: 2.5mm;
+      padding: 4mm 5mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mcell.g  { background: #E8F5EE; border: 0.6mm solid #2D8A4E; }
+    .mcell.a  { background: #FEF9E7; border: 0.6mm solid #D4851A; }
+    .mcell.gr { background: #F3F4F6; border: 0.6mm solid #6B7280; }
+    .mcell.r  { background: #FEF0F0; border: 0.6mm solid #C0392B; }
+
+    .mcell h4 {
+      font-family: 'Raleway', sans-serif;
+      font-size: 4.5mm;
+      font-weight: 800;
+      margin-bottom: 0.8mm;
+    }
+    .mcell.g  h4 { color: #2D8A4E; }
+    .mcell.a  h4 { color: #D4851A; }
+    .mcell.gr h4 { color: #6B7280; }
+    .mcell.r  h4 { color: #C0392B; }
+
+    .mcell-tag {
+      font-size: 2.5mm;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4mm;
+      opacity: 0.7;
+      margin-bottom: 2mm;
+    }
+    .mcell-eg {
+      font-size: 3mm;
+      color: #5A5A72;
+      line-height: 1.55;
+    }
+
+    .mx-x {
+      grid-column: 2 / 4;
+      grid-row: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2mm;
+    }
+    .mx-x span {
+      font-size: 2.7mm;
+      font-weight: 700;
+      color: #4E2A84;
+      letter-spacing: 0.4mm;
+      text-transform: uppercase;
+    }
+    .mx-x .mid { color: #7255A3; font-size: 2.5mm; }
+
+    /* ── THREE PLAYS STRIP ── */
+    .plays-strip {
+      height: 54mm;
+      background: #F0EBF9;
+      border-top: 0.5mm solid #C5B3E6;
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    .play-cell {
+      flex: 1;
+      padding: 4mm 5mm;
+      display: flex;
+      align-items: flex-start;
+      gap: 4mm;
+      border-right: 0.5mm solid #C5B3E6;
+    }
+    .play-cell:last-child { border-right: none; }
+
+    .play-n {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+      font-size: 14mm;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1mm;
+    }
+    .play-cell:nth-child(1) .play-n { color: #E8602C; }
+    .play-cell:nth-child(2) .play-n { color: #D4851A; }
+    .play-cell:nth-child(3) .play-n { color: #4E2A84; }
+
+    .play-content { flex: 1; }
+    .play-tag-strip {
+      display: inline-block;
+      font-size: 2.3mm;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7mm;
+      padding: 0.7mm 2mm;
+      border-radius: 0.8mm;
+      margin-bottom: 1.5mm;
+      color: white;
+    }
+    .play-cell:nth-child(1) .play-tag-strip { background: #E8602C; }
+    .play-cell:nth-child(2) .play-tag-strip { background: #D4851A; }
+    .play-cell:nth-child(3) .play-tag-strip { background: #4E2A84; }
+
+    .play-title-strip {
+      font-family: 'Raleway', sans-serif;
+      font-size: 4.8mm;
+      font-weight: 800;
+      color: #1A1A2E;
+      margin-bottom: 1.5mm;
+      line-height: 1.2;
+    }
+    .play-desc {
+      font-size: 3mm;
+      color: #5A5A72;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="hdr-title">CX GenAI <span>Triage</span> · Session Canvas</div>
+    <div class="hdr-sub">CX Leaders Advance 2026 · Toronto · April 28–29</div>
+  </div>
+  <div class="hdr-right">
+    Akos Tolnai, CCXP &nbsp;·&nbsp; cxla2026.abilitymatrix.com<br>
+    <span style="font-size:2.6mm;font-weight:400;color:rgba(255,255,255,0.4);">© 2026 AbilityMatrix Innovation Consulting Inc. · Sharing with attribution permitted for non-commercial purposes · Commercial facilitation requires written permission.</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SCORE ZONE -->
+  <div class="score-zone">
+    <div>
+      <div class="zone-label">Step 1</div>
+      <div class="zone-title">Score the<br>risk first.</div>
+    </div>
+
+    <div class="factor">
+      <div class="factor-num">Factor 01</div>
+      <div class="factor-q">What is the customer's emotional state?</div>
+      <div class="factor-scale">
+        <div class="scale-item"><span class="scale-box"></span>Low (1)</div>
+        <div class="scale-item"><span class="scale-box"></span>Medium (2)</div>
+        <div class="scale-item"><span class="scale-box"></span>High (3)</div>
+      </div>
+    </div>
+
+    <div class="factor f2">
+      <div class="factor-num">Factor 02</div>
+      <div class="factor-q">What is your audience's AI tolerance?</div>
+      <div class="factor-scale">
+        <div class="scale-item"><span class="scale-box"></span>Low (1)</div>
+        <div class="scale-item"><span class="scale-box"></span>Medium (2)</div>
+        <div class="scale-item"><span class="scale-box"></span>High (3)</div>
+      </div>
+    </div>
+
+    <div class="factor f3">
+      <div class="factor-num">Factor 03</div>
+      <div class="factor-q">What is your compliance burden?</div>
+      <div class="factor-scale">
+        <div class="scale-item"><span class="scale-box"></span>Low (1)</div>
+        <div class="scale-item"><span class="scale-box"></span>Medium (2)</div>
+        <div class="scale-item"><span class="scale-box"></span>High (3)</div>
+      </div>
+    </div>
+
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Initiative / Case</th>
+          <th>F01</th>
+          <th>F02</th>
+          <th>F03</th>
+          <th>Total /9</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td></td><td class="sc"></td><td class="sc"></td><td class="sc"></td><td class="sc"></td></tr>
+        <tr><td></td><td class="sc"></td><td class="sc"></td><td class="sc"></td><td class="sc"></td></tr>
+        <tr><td></td><td class="sc"></td><td class="sc"></td><td class="sc"></td><td class="sc"></td></tr>
+        <tr><td></td><td class="sc"></td><td class="sc"></td><td class="sc"></td><td class="sc"></td></tr>
+        <tr><td></td><td class="sc"></td><td class="sc"></td><td class="sc"></td><td class="sc"></td></tr>
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <strong>Score each factor:</strong> Low = 1 · Medium = 2 · High = 3<br>
+      <strong>Total risk:</strong> 3–5 = lower risk &nbsp;·&nbsp; 6–9 = higher risk
+    </div>
+
+    <div class="prompt-box">
+      <p>What would you kill?<br>Which case had the most avoidable failure?</p>
+    </div>
+  </div>
+
+  <!-- MATRIX ZONE -->
+  <div class="matrix-zone">
+    <div class="zone-label" style="margin-bottom:3mm;">Step 2 · Plot &amp; Decide</div>
+    <div class="matrix-wrap">
+      <div class="mx-y"><span>CX Impact</span></div>
+      <div class="mcell g">
+        <div>
+          <h4>🟢 Quick Wins</h4>
+          <div class="mcell-tag" style="color:#2D8A4E;">Just Do It</div>
+        </div>
+        <div class="mcell-eg">High impact, low risk. Build momentum and prove ROI here first.<br><em>e.g. AI summarising case notes for agents</em></div>
+      </div>
+      <div class="mcell a">
+        <div>
+          <h4>🟡 Strategic Bets</h4>
+          <div class="mcell-tag" style="color:#D4851A;">Plan Carefully</div>
+        </div>
+        <div class="mcell-eg">High impact, high risk. Needs executive air cover, pilots, guardrails.<br><em>e.g. Autonomous customer journey agent</em></div>
+      </div>
+      <div class="mcell gr">
+        <div>
+          <h4>⬜ Incremental Gains</h4>
+          <div class="mcell-tag" style="color:#6B7280;">Automate &amp; Delegate</div>
+        </div>
+        <div class="mcell-eg">Low impact, low risk. Good for ops efficiency. Don't oversell.<br><em>e.g. AI-powered ticket categorisation</em></div>
+      </div>
+      <div class="mcell r">
+        <div>
+          <h4>🔴 Danger Zone</h4>
+          <div class="mcell-tag" style="color:#C0392B;">Avoid At All Costs</div>
+        </div>
+        <div class="mcell-eg">Low impact, high risk. The hardest no - and the most important one.<br><em>e.g. GenAI writing public apologies for outages</em></div>
+      </div>
+      <div class="mx-x">
+        <span>← Low Risk</span>
+        <span class="mid">Audience Tolerance &amp; Compliance Risk</span>
+        <span>High Risk →</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- THREE PLAYS STRIP -->
+<div class="plays-strip">
+  <div class="play-cell">
+    <div class="play-n">01</div>
+    <div class="play-content">
+      <div class="play-tag-strip">Quick Win</div>
+      <div class="play-title-strip">Internal First</div>
+      <div class="play-desc">AI for agents, not customers. Zero customer-facing compliance exposure. Build your evidence base here before going external.</div>
+    </div>
+  </div>
+  <div class="play-cell">
+    <div class="play-n">02</div>
+    <div class="play-content">
+      <div class="play-tag-strip">Strategic Bet</div>
+      <div class="play-title-strip">Opt-In Sandbox</div>
+      <div class="play-desc">Test with customers who volunteer. Explicit consent, clear terms, defined risk perimeter. 55% of AI Adopters are willing to try.</div>
+    </div>
+  </div>
+  <div class="play-cell">
+    <div class="play-n">03</div>
+    <div class="play-content">
+      <div class="play-tag-strip">Long Game</div>
+      <div class="play-title-strip">Structured Content</div>
+      <div class="play-desc">Become the source every AI reaches for. 94% of AI Adopters research before calling. You are the publisher, not the AI operator.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

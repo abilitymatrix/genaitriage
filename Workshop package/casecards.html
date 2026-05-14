@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GenAI Triage · Case Cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: 148mm 210mm;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box; margin: 0; padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: white;
+      color: #1A1A2E;
+    }
+
+    .card {
+      width: 148mm;
+      height: 210mm;
+      display: flex;
+      flex-direction: column;
+      page-break-after: always;
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .card-hdr {
+      background: #4E2A84;
+      padding: 4mm 5mm 3.5mm;
+      flex-shrink: 0;
+    }
+    .card-eye {
+      font-size: 2.4mm;
+      font-weight: 700;
+      letter-spacing: 0.7mm;
+      text-transform: uppercase;
+      color: #C5B3E6;
+      margin-bottom: 1.5mm;
+    }
+    .card-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 6mm;
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+    }
+
+    /* BODY */
+    .card-body {
+      flex: 1;
+      padding: 3.5mm 5mm;
+      display: flex;
+      flex-direction: column;
+      gap: 3mm;
+      overflow: hidden;
+    }
+
+    .failure-tag {
+      display: inline-block;
+      font-size: 2.3mm;
+      font-weight: 700;
+      letter-spacing: 0.6mm;
+      text-transform: uppercase;
+      padding: 0.9mm 2.5mm;
+      border-radius: 0.8mm;
+      color: white;
+      align-self: flex-start;
+    }
+
+    .card-story {
+      font-size: 3.5mm;
+      line-height: 1.65;
+      color: #1A1A2E;
+    }
+
+    .notes-section {
+      border-top: 0.3mm solid #E8E0F5;
+      padding-top: 2mm;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5mm;
+    }
+    .notes-lbl {
+      display: inline-block;
+      font-size: 2.3mm;
+      font-weight: 700;
+      letter-spacing: 0.6mm;
+      text-transform: uppercase;
+      padding: 0.9mm 2.5mm;
+      border-radius: 0.8mm;
+      color: white;
+      background: #E8602C;
+      align-self: flex-start;
+    }
+    .notes-lines {
+      flex: 1;
+      min-height: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(9.5mm - 0.3mm),
+        #E8E0F5 calc(9.5mm - 0.3mm),
+        #E8E0F5 9.5mm
+      );
+    }
+
+    /* Mini scorecard */
+    .sc-row {
+      display: flex;
+      gap: 2mm;
+    }
+    .sc-mini {
+      flex: 1;
+      border-radius: 1.5mm;
+      padding: 1.5mm 2mm;
+      border-top: 1.5mm solid #4E2A84;
+      text-align: center;
+      background: #F0EBF9;
+    }
+    .sc-mini.hi { border-top-color: #C0392B; background: #FEF0F0; }
+    .sc-mini.md { border-top-color: #D4851A; background: #FEF9E7; }
+    .sc-mini.lo { border-top-color: #2D8A4E; background: #E8F5EE; }
+    .sc-mini-lbl {
+      font-size: 2.1mm;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2mm;
+      color: #7255A3;
+      margin-bottom: 0.5mm;
+    }
+    .sc-mini.hi .sc-mini-lbl { color: #C0392B; }
+    .sc-mini.md .sc-mini-lbl { color: #D4851A; }
+    .sc-mini.lo .sc-mini-lbl { color: #2D8A4E; }
+    .sc-mini-val {
+      font-family: 'Raleway', sans-serif;
+      font-size: 3mm;
+      font-weight: 900;
+      color: #4E2A84;
+    }
+    .sc-mini.hi .sc-mini-val { color: #C0392B; }
+    .sc-mini.md .sc-mini-val { color: #D4851A; }
+    .sc-mini.lo .sc-mini-val { color: #2D8A4E; }
+
+    /* Debate box */
+    .debate-box {
+      background: #E8602C;
+      border-radius: 2mm;
+      padding: 3mm 4mm;
+      flex-shrink: 0;
+    }
+    .debate-lbl {
+      font-size: 2.1mm;
+      font-weight: 700;
+      letter-spacing: 0.6mm;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 1mm;
+    }
+    .debate-q {
+      font-family: 'Raleway', sans-serif;
+      font-size: 3.5mm;
+      font-weight: 700;
+      color: white;
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    .card-ftr {
+      background: #1A1A2E;
+      padding: 2mm 5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .card-ftr-lbl {
+      font-size: 2.1mm;
+      font-weight: 600;
+      color: #C5B3E6;
+      letter-spacing: 0.2mm;
+      line-height: 1.5;
+    }
+    .card-ftr-num {
+      font-family: 'Raleway', sans-serif;
+      font-size: 3mm;
+      font-weight: 900;
+      color: #E8602C;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     CARD 01 · AIR CANADA
+══════════════════════════════════ -->
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-eye">Loss of Control · Air Canada · 2024 · Airline</div>
+    <div class="card-title">"You own what<br>your bot says."</div>
+  </div>
+  <div class="card-body">
+    <span class="failure-tag" style="background:#C0392B;">Loss of Control</span>
+    <p class="card-story">
+      A grieving customer asked Air Canada's support chatbot about bereavement fares. The chatbot invented a discount policy that didn't exist, advising the customer they could apply for a reduced fare after purchase. The customer booked based on that advice.
+      <br><br>
+      Air Canada argued in court that it wasn't responsible for what its chatbot said. The court ruled against them. First decision of its kind: your AI is your agent. No disclaimer absolves you.
+    </p>
+    <div class="notes-section">
+      <div class="notes-lbl">Your notes</div>
+      <div class="notes-lines"></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-mini hi"><div class="sc-mini-lbl">Emotional State</div><div class="sc-mini-val">HIGH</div></div>
+      <div class="sc-mini md"><div class="sc-mini-lbl">AI Tolerance</div><div class="sc-mini-val">MED</div></div>
+      <div class="sc-mini hi"><div class="sc-mini-lbl">Compliance</div><div class="sc-mini-val">HIGH</div></div>
+    </div>
+    <div class="debate-box">
+      <div class="debate-lbl">Debate question</div>
+      <p class="debate-q">"What one guardrail would have prevented this - and who in your organisation owns that decision?"</p>
+    </div>
+  </div>
+  <div class="card-ftr">
+    <span class="card-ftr-lbl">CX GenAI Triage · Case Card<br>© 2026 AbilityMatrix Innovation Consulting Inc. · Non-commercial sharing with attribution permitted</span>
+    <span class="card-ftr-num">01 / 05</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CARD 02 · DPD
+══════════════════════════════════ -->
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-eye">Guardrail Failure · DPD · UK · 2024 · Logistics</div>
+    <div class="card-title">"Your brand.<br>Your channel. No override."</div>
+  </div>
+  <div class="card-body">
+    <span class="failure-tag" style="background:#E8602C;">Guardrail Failure</span>
+    <p class="card-story">
+      A customer convinced DPD's branded support chatbot to write a poem criticising the company. The chatbot complied without hesitation. Screenshots went viral on social media within hours.
+      <br><br>
+      DPD's name was on the channel. DPD's reputation took the hit. No one at DPD had defined what the AI was and wasn't allowed to say. The customer got what they wanted. DPD did not.
+    </p>
+    <div class="notes-section">
+      <div class="notes-lbl">Your notes</div>
+      <div class="notes-lines"></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-mini lo"><div class="sc-mini-lbl">Emotional State</div><div class="sc-mini-val">LOW</div></div>
+      <div class="sc-mini hi"><div class="sc-mini-lbl">AI Tolerance</div><div class="sc-mini-val">HIGH</div></div>
+      <div class="sc-mini md"><div class="sc-mini-lbl">Compliance</div><div class="sc-mini-val">MED</div></div>
+    </div>
+    <div class="debate-box">
+      <div class="debate-lbl">Debate question</div>
+      <p class="debate-q">"Who is responsible for defining what a branded AI channel is not allowed to do - and does that person exist at your organisation?"</p>
+    </div>
+  </div>
+  <div class="card-ftr">
+    <span class="card-ftr-lbl">CX GenAI Triage · Case Card<br>© 2026 AbilityMatrix Innovation Consulting Inc. · Non-commercial sharing with attribution permitted</span>
+    <span class="card-ftr-num">02 / 05</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CARD 03 · NYC MYCITY AI
+══════════════════════════════════ -->
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-eye">Regulatory Exposure · NYC MyCity AI · 2024 · Government</div>
+    <div class="card-title">"Official channel.<br>Official liability."</div>
+  </div>
+  <div class="card-body">
+    <span class="failure-tag" style="background:#D4851A;">Regulatory Exposure</span>
+    <p class="card-story">
+      New York City launched an official AI assistant to help businesses navigate local regulations. The AI advised businesses to take actions that violated local employment law. The city had to publicly retract the guidance and suspend the service.
+      <br><br>
+      The official branding implied an accuracy the model couldn't deliver. Businesses made real operational decisions based on the advice before the retraction was issued.
+    </p>
+    <div class="notes-section">
+      <div class="notes-lbl">Your notes</div>
+      <div class="notes-lines"></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-mini hi"><div class="sc-mini-lbl">Emotional State</div><div class="sc-mini-val">HIGH</div></div>
+      <div class="sc-mini lo"><div class="sc-mini-lbl">AI Tolerance</div><div class="sc-mini-val">LOW</div></div>
+      <div class="sc-mini hi"><div class="sc-mini-lbl">Compliance</div><div class="sc-mini-val">HIGH</div></div>
+    </div>
+    <div class="debate-box">
+      <div class="debate-lbl">Debate question</div>
+      <p class="debate-q">"How do you communicate AI limitations without destroying trust in the official channel - or the brand behind it?"</p>
+    </div>
+  </div>
+  <div class="card-ftr">
+    <span class="card-ftr-lbl">CX GenAI Triage · Case Card<br>© 2026 AbilityMatrix Innovation Consulting Inc. · Non-commercial sharing with attribution permitted</span>
+    <span class="card-ftr-num">03 / 05</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CARD 04 · CRA CHARLIE (EXERCISE)
+══════════════════════════════════ -->
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-eye">Framework Exercise · Canada Revenue Agency · Government / Tax</div>
+    <div class="card-title">"Charlie." Score it.<br>Plot it. Defend it.</div>
+  </div>
+  <div class="card-body">
+    <span class="failure-tag" style="background:#4E2A84;">Your Assessment</span>
+    <p class="card-story">
+      The Canada Revenue Agency runs a public-facing chatbot called Charlie. It handles general tax questions and links answers to official CRA source pages so users can verify the information themselves. It explicitly cannot handle sensitive personal details such as SIN or account information.
+      <br><br>
+      Accuracy is mixed: impressive on many common questions, and 2 of 6 correct when tested by the Auditor General. High-compliance context. Government channel. Public-facing.
+    </p>
+    <div class="notes-section">
+      <div class="notes-lbl">Your notes</div>
+      <div class="notes-lines"></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-mini"><div class="sc-mini-lbl">Emotional State</div><div class="sc-mini-val">?</div></div>
+      <div class="sc-mini"><div class="sc-mini-lbl">AI Tolerance</div><div class="sc-mini-val">?</div></div>
+      <div class="sc-mini"><div class="sc-mini-lbl">Compliance</div><div class="sc-mini-val">?</div></div>
+    </div>
+    <div class="debate-box">
+      <div class="debate-lbl">Your task</div>
+      <p class="debate-q">"Score Charlie on the three factors. Plot it on the matrix. Defend your quadrant. Is the framework giving you a clear answer - or exposing a trade-off?"</p>
+    </div>
+  </div>
+  <div class="card-ftr">
+    <span class="card-ftr-lbl">CX GenAI Triage · Case Card<br>© 2026 AbilityMatrix Innovation Consulting Inc. · Non-commercial sharing with attribution permitted</span>
+    <span class="card-ftr-num">04 / 05</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CARD 05 · KLARNA
+══════════════════════════════════ -->
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-eye">Misaligned Objective · Klarna · 2024 · Fintech</div>
+    <div class="card-title">"The AI did exactly<br>what it was told."</div>
+  </div>
+  <div class="card-body">
+    <span class="failure-tag" style="background:#D4851A;">Wrong Objective</span>
+    <p class="card-story">
+      Klarna replaced a significant portion of its customer support workforce with AI, optimising the system for ticket resolution speed and cost reduction. The AI performed exactly as designed. Metrics improved.
+      <br><br>
+      Customer satisfaction scores dropped. The failure was not a loss of control - no one asked the AI to care about the customer experience. The AI succeeded at its objective. That was the problem.
+    </p>
+    <div class="notes-section">
+      <div class="notes-lbl">Your notes</div>
+      <div class="notes-lines"></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-mini hi"><div class="sc-mini-lbl">Emotional State</div><div class="sc-mini-val">HIGH</div></div>
+      <div class="sc-mini md"><div class="sc-mini-lbl">AI Tolerance</div><div class="sc-mini-val">MED</div></div>
+      <div class="sc-mini md"><div class="sc-mini-lbl">Compliance</div><div class="sc-mini-val">MED</div></div>
+    </div>
+    <div class="debate-box">
+      <div class="debate-lbl">Debate question</div>
+      <p class="debate-q">"The AI succeeded at its objective. Who owns the failure: the model, the product team, or the executive who approved the business case?"</p>
+    </div>
+  </div>
+  <div class="card-ftr">
+    <span class="card-ftr-lbl">CX GenAI Triage · Case Card<br>© 2026 AbilityMatrix Innovation Consulting Inc. · Non-commercial sharing with attribution permitted</span>
+    <span class="card-ftr-num">05 / 05</span>
+  </div>
+</div>
+
+</body>
+</html>

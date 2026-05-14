@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenAI Triage Workshop | Akos Tolnai, CCXP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p:     #4E2A84;
+      --pm:    #7255A3;
+      --pl:    #C5B3E6;
+      --pxl:   #F0EBF9;
+      --o:     #E8602C;
+      --w:     #FFFFFF;
+      --dark:  #1A1A2E;
+      --muted: #5A5A72;
+      --green: #2D8A4E;
+      --red:   #C0392B;
+      --amber: #D4851A;
+      --grey:  #6B7280;
+      --border:#E8E0F5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--dark); background: var(--w);
+      overflow-x: hidden; line-height: 1.7;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 80px); }
+
+    /* ── NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(24px, 5vw, 60px);
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+      transition: transform 0.3s ease;
+    }
+    .topnav-logo { display: flex; align-items: center; gap: 10px; }
+    .brand { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; color: var(--p); letter-spacing: 1px; }
+    .nav-cta {
+      background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 10px 20px; border-radius: 6px; transition: background 0.2s; white-space: nowrap;
+    }
+    .nav-cta:hover { background: #d4521f; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; background: var(--w);
+      display: flex; flex-direction: column;
+      padding-top: 58px; position: relative; overflow: hidden;
+    }
+    .hero-inner {
+      flex: 1; display: flex; align-items: center;
+      padding: clamp(60px, 8vh, 100px) clamp(24px, 8vw, 140px) clamp(40px, 5vh, 60px);
+      position: relative; z-index: 1;
+    }
+    .hero-text { max-width: 720px; }
+    .hero-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: var(--o); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(36px, 5.5vw, 72px);
+      line-height: 1.05; color: var(--p);
+      letter-spacing: -1px; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: normal; color: var(--o); }
+    .hero-sub {
+      font-size: clamp(16px, 1.8vw, 20px); color: var(--muted);
+      line-height: 1.6; margin-bottom: 36px; max-width: 580px;
+    }
+    .hero-cta {
+      display: inline-block; background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 15px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 16px 32px; border-radius: 8px; transition: background 0.2s;
+      margin-bottom: 40px; display: inline-block;
+    }
+    .hero-cta:hover { background: #d4521f; }
+    .hero-trust { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+    .trust-badge { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .trust-badge::before { content: '✓'; color: var(--green); font-weight: 700; }
+    .hero-deco {
+      position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+      opacity: 0.04; pointer-events: none;
+    }
+    .hero-right-bar {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 8px;
+      background: linear-gradient(to bottom, var(--pl), var(--p));
+    }
+
+    /* ── SECTIONS ── */
+    .section { padding: clamp(72px, 10vh, 110px) 0; }
+    .section.alt { background: var(--pxl); }
+    .section-label {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: var(--o); margin-bottom: 14px; display: block;
+    }
+    .section h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(28px, 3.5vw, 48px);
+      color: var(--p); line-height: 1.1;
+      margin-bottom: clamp(20px, 2.5vw, 32px);
+    }
+    .section h2 em { font-style: normal; color: var(--o); }
+    .prose {
+      font-size: clamp(15px, 1.4vw, 17px); color: var(--muted);
+      line-height: 1.8; margin-bottom: 18px;
+    }
+    .prose:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--dark); font-weight: 600; }
+
+    /* ── TWO COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
+    @media (max-width: 780px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block; background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 14px 28px; border-radius: 7px; transition: background 0.2s;
+    }
+    .btn:hover { background: #d4521f; }
+    .btn.outline {
+      background: transparent; border: 2px solid var(--o); color: var(--o);
+    }
+    .btn.outline:hover { background: var(--o); color: var(--w); }
+
+    /* ── PROBLEM ── */
+    .problem-statement {
+      font-family: 'Raleway', sans-serif; font-weight: 700;
+      font-size: clamp(20px, 2.5vw, 30px); color: var(--dark);
+      line-height: 1.4; margin-bottom: 28px;
+    }
+    .problem-statement span { color: var(--o); }
+    .missing-list { display: flex; flex-direction: column; gap: 10px; }
+    .missing-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 14px; background: #FEF0F0;
+      border-radius: 8px; border: 1px solid #F5C5C0;
+    }
+    .missing-x { color: var(--red); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .missing-text { font-size: 14px; color: var(--dark); line-height: 1.5; }
+
+    /* ── INSIGHT ── */
+    .insight {
+      background: var(--pxl); border-left: 5px solid var(--p);
+      padding: 18px 22px; border-radius: 0 8px 8px 0; margin-top: 24px;
+    }
+    .insight p { font-size: clamp(14px, 1.3vw, 16px); color: var(--p); font-weight: 500; margin: 0; line-height: 1.6; }
+    .insight.orange { background: #FFF3EE; border-left-color: var(--o); }
+    .insight.orange p { color: var(--dark); }
+
+    /* ── MINI MATRIX ── */
+    .mini-matrix {
+      display: grid; grid-template-columns: 24px 1fr 1fr;
+      grid-template-rows: 1fr 1fr 28px;
+      gap: 6px; height: 300px;
+    }
+    .mini-matrix-y { grid-column: 1; grid-row: 1/3; display: flex; align-items: center; justify-content: center; }
+    .mini-matrix-y span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 9px; font-weight: 700; color: var(--p); letter-spacing: 2px; text-transform: uppercase; }
+    .mcell-mini { border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .mcell-mini.g  { background: #E8F5EE; border: 2px solid var(--green); }
+    .mcell-mini.a  { background: #FEF9E7; border: 2px solid var(--amber); }
+    .mcell-mini.gr { background: #F3F4F6; border: 2px solid var(--grey); }
+    .mcell-mini.r  { background: #FEF0F0; border: 2px solid var(--red); }
+    .mcell-mini h5 { font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 800; margin-bottom: 4px; }
+    .mcell-mini.g  h5 { color: var(--green); }
+    .mcell-mini.a  h5 { color: var(--amber); }
+    .mcell-mini.gr h5 { color: var(--grey); }
+    .mcell-mini.r  h5 { color: var(--red); }
+    .mcell-mini-eg { font-size: 11px; color: var(--muted); line-height: 1.3; }
+    .mini-matrix-x { grid-column: 2/4; grid-row: 3; display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
+    .mini-matrix-x span { font-size: 9px; font-weight: 700; color: var(--p); letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── FORMAT STEPS ── */
+    .format-steps { display: flex; flex-direction: column; }
+    .format-step { display: flex; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .format-step:last-child { border-bottom: none; }
+    .format-num { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 32px; color: var(--pl); line-height: 1; flex-shrink: 0; width: 44px; }
+    .format-title { font-family: 'Raleway', sans-serif; font-size: 16px; font-weight: 700; color: var(--p); margin-bottom: 5px; }
+    .format-body { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* ── SESSION DETAILS CARD ── */
+    .session-card { background: var(--w); border-radius: 14px; padding: 32px; border: 1.5px solid var(--border); }
+    .session-card-label { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--pm); margin-bottom: 20px; }
+    .session-detail { display: flex; gap: 14px; margin-bottom: 18px; }
+    .session-detail:last-child { margin-bottom: 0; }
+    .session-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .session-dt { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px; color: var(--p); margin-bottom: 3px; }
+    .session-dd { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ── WHO IT'S FOR ── */
+    .for-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 32px; }
+    .for-card { background: var(--w); border: 1.5px solid var(--border); border-radius: 10px; padding: 22px; }
+    .for-card-icon { font-size: 28px; margin-bottom: 10px; }
+    .for-card-title { font-family: 'Raleway', sans-serif; font-size: 15px; font-weight: 700; color: var(--p); margin-bottom: 6px; }
+    .for-card-body { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ── STATS ── */
+    .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 36px; }
+    .stat-card { flex: 1; min-width: 160px; background: var(--w); border-radius: 12px; padding: 24px 20px; text-align: center; border: 2px solid var(--border); }
+    .stat-big { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(40px, 5vw, 58px); color: var(--p); line-height: 1; display: block; }
+    .stat-big.o { color: var(--o); }
+    .stat-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
+
+    /* ── OBJECTIONS ── */
+    .objection { padding: 22px 0; border-bottom: 1px solid var(--border); }
+    .objection:last-child { border-bottom: none; }
+    .objection-q { font-family: 'Raleway', sans-serif; font-size: clamp(15px, 1.5vw, 18px); font-weight: 700; color: var(--p); margin-bottom: 10px; }
+    .objection-a { font-size: clamp(14px, 1.3vw, 16px); color: var(--muted); line-height: 1.75; }
+
+    /* ── ABOUT ── */
+    .cred-card { background: var(--w); border-radius: 14px; padding: 32px; border: 1.5px solid var(--border); }
+    .cred-label { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--pm); margin-bottom: 20px; }
+    .cred-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .cred-item:last-child { margin-bottom: 0; }
+    .cred-arrow { color: var(--o); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    .cred-text { font-size: 14px; color: var(--dark); line-height: 1.5; }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      background: var(--p);
+      padding: clamp(80px, 12vh, 130px) clamp(24px, 8vw, 140px);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .final-cta-bg {
+      position: absolute; right: -20px; bottom: -40px;
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: 240px; color: rgba(255,255,255,0.03);
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .final-cta h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(32px, 4.5vw, 60px);
+      color: var(--w); line-height: 1.1; margin-bottom: 20px;
+    }
+    .final-cta p { font-size: clamp(15px, 1.5vw, 18px); color: var(--pl); max-width: 540px; margin: 0 auto 36px; line-height: 1.7; }
+    .btn-white {
+      display: inline-block; background: var(--w); color: var(--p);
+      font-family: 'Raleway', sans-serif; font-size: 15px; font-weight: 800;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 16px 36px; border-radius: 8px; transition: opacity 0.2s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+
+    /* ── RIGHT COLUMN OFFSET (mirrors landing page tension card fix) ── */
+    .right-offset { padding-top: clamp(80px,14vh,144px); }
+    @media (max-width:780px) { .right-offset { padding-top: 0; } }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--dark); padding: 22px clamp(24px, 5vw, 80px);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-l { font-family: 'Raleway', sans-serif; font-size: 13px; color: rgba(255,255,255,0.35); }
+    .footer-r { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal.d1 { transition-delay: 0.1s; }
+    .reveal.d2 { transition-delay: 0.2s; }
+    .reveal.d3 { transition-delay: 0.3s; }
+    .reveal.d4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-logo">
+    <svg width="26" height="26" viewBox="0 0 38 38" fill="none">
+      <polygon points="19,1 37,19 19,37 1,19" stroke="#4E2A84" stroke-width="2.5"/>
+      <polygon points="19,8 30,19 19,30 8,19" fill="#4E2A84"/>
+    </svg>
+    <span class="brand">Akos Tolnai, CCXP</span>
+  </div>
+  <a href="https://l.abilitymatrix.com/Akos30" target="_blank" rel="noopener" class="nav-cta">Book a Session</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-deco" aria-hidden="true">
+    <svg width="480" height="600" viewBox="0 0 320 430" fill="none">
+      <defs>
+        <linearGradient id="gv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C5B3E6"/><stop offset="100%" stop-color="#4E2A84"/></linearGradient>
+        <linearGradient id="gh" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9070C0" stop-opacity="0.7"/><stop offset="100%" stop-color="#4E2A84" stop-opacity="0.9"/></linearGradient>
+      </defs>
+      <rect x="120" y="-30" width="80" height="490" rx="6" fill="url(#gv)" transform="rotate(45 160 215)"/>
+      <rect x="120" y="-30" width="80" height="490" rx="6" fill="url(#gh)" transform="rotate(-45 160 215)" opacity="0.75"/>
+    </svg>
+  </div>
+  <div class="hero-right-bar"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow reveal">Facilitated Workshop · Half-Day · For Leadership Teams</div>
+      <h1 class="reveal d1">Your team leaves with<br>a GenAI roadmap<br><em>compliance can sign off on.</em></h1>
+      <p class="hero-sub reveal d2">Not a framework you read about. One you've run your organisation's own initiatives through, scored against real customer risk data, and prioritised with your leadership team in the room.</p>
+      <a href="https://l.abilitymatrix.com/Akos30" target="_blank" rel="noopener" class="hero-cta reveal d3">Book a 30-minute call</a>
+      <div class="hero-trust reveal d4">
+        <span class="trust-badge">CCXP Certified</span>
+        <span class="trust-badge">Built on n=104 consumer research</span>
+        <span class="trust-badge">CX Leaders Advance 2026, Toronto</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="section alt">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <span class="section-label reveal">The Problem</span>
+        <p class="problem-statement reveal d1">The board wants GenAI <span>yesterday.</span> Compliance wants guardrails. <span>You're accountable for both.</span></p>
+        <p class="prose reveal d2">Most organisations are stuck in the middle: running ideas past stakeholders without a shared language for deciding what to build and what to kill. Every GenAI initiative becomes a negotiation instead of a decision.</p>
+        <p class="prose reveal d3">The risk of getting this wrong is no longer theoretical. Courts are ruling on chatbot liability. Brands are going viral for the wrong reasons. Regulators are watching. The cost of a bad decision is measurable, public, and lands in the CX leader's inbox.</p>
+        <div class="insight orange reveal d4">
+          <p>Reading about a framework is not the same as applying it to your organisation. The workshop is the application layer.</p>
+        </div>
+      </div>
+      <div class="reveal d2 right-offset">
+        <div style="background:var(--w);border-radius:14px;padding:28px;border:1.5px solid var(--border);">
+          <div style="font-family:'Raleway',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--pm);margin-bottom:20px;">What most teams are working without</div>
+          <div class="missing-list">
+            <div class="missing-item">
+              <span class="missing-x">✕</span>
+              <div class="missing-text">A common scoring language across CX, legal, and technology</div>
+            </div>
+            <div class="missing-item">
+              <span class="missing-x">✕</span>
+              <div class="missing-text">A way to say no to bad ideas with data, not just instinct</div>
+            </div>
+            <div class="missing-item">
+              <span class="missing-x">✕</span>
+              <div class="missing-text">A clear picture of which initiatives are Quick Wins vs. Danger Zone</div>
+            </div>
+            <div class="missing-item">
+              <span class="missing-x">✕</span>
+              <div class="missing-text">Board-level language that compliance and legal can actually engage with</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE FRAMEWORK -->
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <span class="section-label reveal">The Framework</span>
+        <h2 class="reveal d1">Score before you build.<br><em>Plot before you commit.</em></h2>
+        <p class="prose reveal d2">The GenAI Triage Workshop is built around a two-axis prioritisation matrix developed for leadership teams. Every GenAI initiative your organisation is considering gets scored against three risk factors, then plotted on the matrix. The quadrant it lands in tells you the right posture.</p>
+        <p class="prose reveal d3">The three scoring factors: the customer's emotional state at the point of contact, your audience's actual AI tolerance, and your compliance burden. Score first. Plot after. The order matters.</p>
+        <div class="insight reveal d4">
+          <p>The framework was built before the consumer data came in. The research calibrates the scores to what your customers actually expect — not what vendors assume they will accept.</p>
+        </div>
+        <div style="margin-top:28px;" class="reveal d4">
+          <a href="/genai-paradox/" class="btn outline">Read the full research</a>
+        </div>
+      </div>
+      <div class="reveal d2 right-offset">
+        <div class="mini-matrix">
+          <div class="mini-matrix-y"><span>CX Impact →</span></div>
+          <div class="mcell-mini g" style="grid-row:1;grid-column:2;">
+            <h5>🟢 Quick Wins</h5>
+            <div class="mcell-mini-eg">Just Do It<br><em>e.g. AI case note summaries for agents</em></div>
+          </div>
+          <div class="mcell-mini a" style="grid-row:1;grid-column:3;">
+            <h5>🟡 Strategic Bets</h5>
+            <div class="mcell-mini-eg">Plan Carefully<br><em>e.g. Autonomous customer journey agent</em></div>
+          </div>
+          <div class="mcell-mini gr" style="grid-row:2;grid-column:2;">
+            <h5>⬜ Incremental Gains</h5>
+            <div class="mcell-mini-eg">Automate &amp; Delegate<br><em>e.g. AI ticket categorisation</em></div>
+          </div>
+          <div class="mcell-mini r" style="grid-row:2;grid-column:3;">
+            <h5>🔴 Danger Zone</h5>
+            <div class="mcell-mini-eg">Avoid At All Costs<br><em>e.g. GenAI writing public apologies</em></div>
+          </div>
+          <div class="mini-matrix-x">
+            <span>← Low Risk</span>
+            <span style="color:var(--pm);font-size:8px;">Audience Tolerance &amp; Compliance Risk</span>
+            <span>High Risk →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT HAPPENS IN THE ROOM -->
+<section class="section alt">
+  <div class="container">
+    <span class="section-label reveal">The Session</span>
+    <h2 class="reveal d1">What happens<br><em>in the room.</em></h2>
+    <div class="two-col" style="margin-top:clamp(32px,4vh,48px);">
+      <div class="format-steps reveal d2">
+        <div class="format-step">
+          <div class="format-num">01</div>
+          <div>
+            <div class="format-title">Pre-session preparation</div>
+            <div class="format-body">You bring a list of GenAI initiatives your organisation is actively considering or already running. No preparation required beyond that. The workshop works with what you have.</div>
+          </div>
+        </div>
+        <div class="format-step">
+          <div class="format-num">02</div>
+          <div>
+            <div class="format-title">Score each initiative</div>
+            <div class="format-body">Working through each initiative together, you run it through the three-factor Risk Scorecard. This is where the hard conversations happen and where hidden assumptions surface. Facilitated, structured, and time-boxed.</div>
+          </div>
+        </div>
+        <div class="format-step">
+          <div class="format-num">03</div>
+          <div>
+            <div class="format-title">Plot the matrix</div>
+            <div class="format-body">Each initiative gets plotted based on its score. Patterns emerge. Some ideas move to Quick Wins. Some land in the Danger Zone. A few become Strategic Bets with a clear pilot path.</div>
+          </div>
+        </div>
+        <div class="format-step">
+          <div class="format-num">04</div>
+          <div>
+            <div class="format-title">Leave with a roadmap</div>
+            <div class="format-body">A prioritised, scored matrix with your actual initiatives plotted. A shared language your legal, compliance, and executive stakeholders can engage with. And a clear next step for each idea.</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal d3 right-offset">
+        <div class="session-card">
+          <div class="session-card-label">Session details</div>
+          <div class="session-detail">
+            <span class="session-icon">⏱</span>
+            <div>
+              <div class="session-dt">Half-day</div>
+              <div class="session-dd">3.5 to 4 hours, on-site or remote</div>
+            </div>
+          </div>
+          <div class="session-detail">
+            <span class="session-icon">👥</span>
+            <div>
+              <div class="session-dt">Up to 6 participants per group</div>
+              <div class="session-dd">Works best with CX, digital, legal, and compliance in the room together. For larger teams, groups of 6 run the session in parallel and compare outputs at the end</div>
+            </div>
+          </div>
+          <div class="session-detail">
+            <span class="session-icon">📋</span>
+            <div>
+              <div class="session-dt">What you bring</div>
+              <div class="session-dd">A list of GenAI ideas or initiatives currently on the table. Nothing else required</div>
+            </div>
+          </div>
+          <div class="session-detail">
+            <span class="session-icon">✅</span>
+            <div>
+              <div class="session-dt">What you leave with</div>
+              <div class="session-dd">A scored, prioritised matrix with your real initiatives plotted, plus the shared language to move the conversation forward internally</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:24px;text-align:center;">
+          <a href="https://l.abilitymatrix.com/Akos30" target="_blank" rel="noopener" class="btn">Book a 30-minute call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="section">
+  <div class="container">
+    <span class="section-label reveal">Who It's For</span>
+    <h2 class="reveal d1">Built for senior leaders<br><em>navigating regulated environments.</em></h2>
+    <p class="prose reveal d2" style="max-width:680px;">The workshop is most valuable when the people who own GenAI strategy, compliance accountability, and customer experience decisions are in the room at the same time.</p>
+    <div class="for-grid reveal d3">
+      <div class="for-card">
+        <div class="for-card-icon">🎯</div>
+        <div class="for-card-title">Head of CX / VP Customer Experience</div>
+        <div class="for-card-body">Accountable for the customer experience outcomes. Needs a framework that survives the compliance review.</div>
+      </div>
+      <div class="for-card">
+        <div class="for-card-icon">📱</div>
+        <div class="for-card-title">VP Digital / Head of Digital Channels</div>
+        <div class="for-card-body">Building the roadmap. Needs to sequence AI investments with evidence, not enthusiasm.</div>
+      </div>
+      <div class="for-card">
+        <div class="for-card-icon">⚖️</div>
+        <div class="for-card-title">Legal, Compliance &amp; Risk</div>
+        <div class="for-card-body">The team that needs to sign off. The framework gives them a structured input method, not a finished decision to accept or reject.</div>
+      </div>
+      <div class="for-card">
+        <div class="for-card-icon">🏦</div>
+        <div class="for-card-title">Regulated industries</div>
+        <div class="for-card-body">Finance, healthcare, insurance, government. Where the cost of a wrong AI answer is measured in regulatory exposure, not just customer satisfaction scores.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE DATA -->
+<section class="section alt">
+  <div class="container">
+    <span class="section-label reveal">Why Now</span>
+    <h2 class="reveal d1">Your customers are already<br><em>living with this.</em></h2>
+    <p class="prose reveal d2" style="max-width:680px;">The framework was built before the consumer data came in. When 104 respondents across Canada and the US were surveyed on AI and customer experience, the findings made the case more urgent than any vendor pitch could.</p>
+    <div class="stat-row reveal d3">
+      <div class="stat-card">
+        <span class="stat-big">78%</span>
+        <div class="stat-desc">chose accuracy over speed, including daily AI users. The bar hasn't been lowered.</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-big o">83%</span>
+        <div class="stat-desc">frustrated or infuriated by scripted chatbots. Only 2% find them efficient.</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-big">94%</span>
+        <div class="stat-desc">of AI Adopters already use personal AI before contacting support. They are bypassing your bot.</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-big o">29%</span>
+        <div class="stat-desc">of daily AI users would refuse an imperfect AI agent outright. Know your number before you build.</div>
+      </div>
+    </div>
+    <div class="insight reveal d4" style="margin-top:32px;">
+      <p>The risk is real and documented. Air Canada was held liable for what its chatbot said. DPD went viral for what its bot wrote. New York City had to retract guidance its AI gave to businesses. These are not edge cases. <a href="/genai-paradox/" style="color:var(--p);font-weight:600;">Read the full case studies.</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIONS -->
+<section class="section">
+  <div class="container" style="max-width:780px;">
+    <span class="section-label reveal">Common Questions</span>
+    <h2 class="reveal d1">Honest answers<br><em>to the real objections.</em></h2>
+    <div style="margin-top:clamp(28px,4vh,44px);" class="reveal d2">
+      <div class="objection">
+        <div class="objection-q">"We already have an AI strategy."</div>
+        <div class="objection-a">Most organisations have a direction, not a triage model. The workshop doesn't replace your strategy. It gives your team a shared scoring language to test your current initiatives against real customer-centric risk before committing resources. If your strategy is solid, the matrix will confirm it. If there are gaps, better to find them in the room than in production.</div>
+      </div>
+      <div class="objection">
+        <div class="objection-q">"Our compliance team won't move on GenAI right now."</div>
+        <div class="objection-a">That is exactly why the workshop exists. The Risk Scorecard gives compliance a structured input method instead of a binary yes or no on a finished proposal. Most teams find that compliance is more willing to engage when they are part of the scoring conversation rather than being handed a decision to approve.</div>
+      </div>
+      <div class="objection">
+        <div class="objection-q">"We're not ready yet."</div>
+        <div class="objection-a">The workshop works best before you are fully committed to a direction, not after. If your organisation is in the "we need to figure out where to start" phase, the matrix is the right tool. It helps you identify the Quick Wins you can move on immediately and the Strategic Bets worth planning for, before anyone has written a line of code or signed a vendor contract.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section alt">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <span class="section-label reveal">About</span>
+        <h2 class="reveal d1">Akos Tolnai, <em>CCXP</em></h2>
+        <p class="prose reveal d2">Senior CX strategist with experience building customer experience frameworks for enterprise organisations. The GenAI Triage Workshop was developed from original consumer research across 104 respondents in Canada and the US, and the framework was presented as a 60-minute breakout session at CX Leaders Advance 2026 in Toronto.</p>
+        <p class="prose reveal d3">The workshop reflects what actually happens when CX leaders try to move on GenAI in regulated environments: the board pressure is real, the compliance constraints are real, and the gap between "we should do something" and "here is what we will build and why" is where most programmes stall.</p>
+        <div style="margin-top:28px;" class="reveal d3">
+          <a href="https://linkedin.com/in/akostolnai" target="_blank" rel="noopener" style="color:var(--p);font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;">linkedin.com/in/akostolnai</a>
+        </div>
+      </div>
+      <div class="reveal d2 right-offset">
+        <div class="cred-card">
+          <div class="cred-label">Credentials</div>
+          <div class="cred-item">
+            <span class="cred-arrow">→</span>
+            <div class="cred-text">CCXP (Certified Customer Experience Professional)</div>
+          </div>
+          <div class="cred-item">
+            <span class="cred-arrow">→</span>
+            <div class="cred-text">Ivey Executive MBA candidate, June 2027</div>
+          </div>
+          <div class="cred-item">
+            <span class="cred-arrow">→</span>
+            <div class="cred-text">Speaker, CX Leaders Advance 2026, Toronto</div>
+          </div>
+          <div class="cred-item">
+            <span class="cred-arrow">→</span>
+            <div class="cred-text">Original consumer research: 104 respondents, Canada &amp; US, Feb–Mar 2026</div>
+          </div>
+          <div class="cred-item">
+            <span class="cred-arrow">→</span>
+            <div class="cred-text">Session: "Navigating the GenAI Paradox: Balancing Time-to-Value with Trust &amp; Compliance"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-bg" aria-hidden="true">→</div>
+  <h2 class="reveal">Ready to triage<br>your GenAI initiatives?</h2>
+  <p class="reveal d1">Book a 30-minute call to discuss whether the GenAI Triage Workshop is the right fit for your organisation. No commitment required.</p>
+  <a href="https://l.abilitymatrix.com/Akos30" target="_blank" rel="noopener" class="btn-white reveal d2">Book a 30-minute call</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-l">GenAI Triage Workshop · Akos Tolnai, CCXP &nbsp;·&nbsp; © 2026 All rights reserved.</div>
+  <div class="footer-r">Sharing with attribution permitted for non-commercial purposes · Commercial use requires written permission · genaiparadox.com</div>
+</footer>
+
+<script>
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  let lastY = 0;
+  const nav = document.getElementById('topnav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.style.transform = (y > lastY && y > 100) ? 'translateY(-100%)' : 'translateY(0)';
+    lastY = y;
+  }, { passive: true });
+</script>
+</body>
+</html>
