@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Certified Facilitators | GenAI Paradox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p:     #4E2A84;
+      --pm:    #7255A3;
+      --pl:    #C5B3E6;
+      --pxl:   #F0EBF9;
+      --o:     #E8602C;
+      --w:     #FFFFFF;
+      --dark:  #1A1A2E;
+      --muted: #5A5A72;
+      --green: #2D8A4E;
+      --border:#E8E0F5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; color: var(--dark); background: var(--w); overflow-x: hidden; line-height: 1.7; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 80px); }
+
+    /* ── TOPNAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(24px, 5vw, 60px);
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .topnav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .topnav-logo .brand { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; color: var(--p); letter-spacing: 1px; }
+    .topnav-links { display: flex; align-items: center; gap: 4px; }
+    .topnav-link {
+      font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 600;
+      color: var(--pm); text-decoration: none; padding: 6px 10px; border-radius: 4px;
+      transition: color 0.2s; white-space: nowrap;
+    }
+    .topnav-link:hover { color: var(--p); }
+    .topnav-link-btn {
+      font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--w); text-decoration: none;
+      background: var(--o); padding: 6px 14px; border-radius: 4px;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .topnav-link-btn:hover { background: #d4521f; }
+    @media (max-width: 680px) { .topnav-links { display: none; } }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--p); padding: clamp(120px, 18vh, 180px) clamp(24px, 8vw, 140px) clamp(80px, 12vh, 130px);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; right: -20px; bottom: -40px;
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(120px, 20vw, 260px); line-height: 1;
+      color: rgba(255,255,255,0.03); pointer-events: none; user-select: none;
+    }
+    .hero-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 5px; text-transform: uppercase; color: var(--o); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(36px, 6vw, 80px); line-height: 1.05; color: var(--w);
+      letter-spacing: -1px; margin-bottom: 24px; max-width: 760px;
+    }
+    .hero h1 em { font-style: normal; color: var(--o); }
+    .hero-sub {
+      font-size: clamp(15px, 1.6vw, 19px); color: var(--pl);
+      line-height: 1.65; max-width: 580px;
+    }
+
+    /* ── SECTION DEFAULTS ── */
+    .section { padding: clamp(72px, 10vh, 110px) 0; }
+    .section-label {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--o); margin-bottom: 14px; display: block;
+    }
+    .section h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 3.5vw, 48px); color: var(--p); line-height: 1.15;
+      margin-bottom: clamp(40px, 5vh, 60px);
+    }
+    .section h2 em { font-style: normal; color: var(--o); }
+    .prose {
+      font-size: clamp(15px, 1.4vw, 17px); color: var(--muted);
+      line-height: 1.8; margin-bottom: 16px;
+    }
+
+    /* ── FACILITATOR CARDS ── */
+    .facilitator-grid { display: flex; flex-direction: column; gap: clamp(32px, 5vh, 56px); }
+    .facilitator-card {
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: clamp(28px, 4vw, 48px); display: grid;
+      grid-template-columns: 140px 1fr; gap: clamp(24px, 4vw, 48px);
+      align-items: start;
+    }
+    .facilitator-card.featured { border-color: var(--p); border-width: 2px; background: var(--pxl); }
+    @media (max-width: 600px) { .facilitator-card { grid-template-columns: 1fr; } }
+
+    .facilitator-photo {
+      width: 120px; height: 120px; border-radius: 12px;
+      background: var(--p); display: flex; align-items: center; justify-content: center;
+      font-family: 'Raleway', sans-serif; font-size: 38px; font-weight: 900; color: var(--pl);
+      flex-shrink: 0; overflow: hidden;
+    }
+    .facilitator-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .facilitator-badge {
+      display: inline-block; margin-top: 12px;
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      background: var(--p); color: var(--w);
+      padding: 4px 10px; border-radius: 3px;
+    }
+    .facilitator-badge.creator { background: var(--o); }
+
+    .facilitator-name {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(22px, 2.8vw, 32px); color: var(--p); margin-bottom: 4px;
+    }
+    .facilitator-title { font-size: 15px; color: var(--pm); margin-bottom: 16px; font-weight: 500; }
+    .facilitator-bio { font-size: clamp(14px, 1.3vw, 16px); color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+    .facilitator-cta {
+      display: inline-block; background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 11px 22px; border-radius: 6px; transition: background 0.2s;
+    }
+    .facilitator-cta:hover { background: #d4521f; }
+    .facilitator-cta.secondary {
+      background: transparent; color: var(--p); border: 2px solid var(--p);
+    }
+    .facilitator-cta.secondary:hover { background: var(--pxl); }
+
+    /* ── BECOME A FACILITATOR ── */
+    .become {
+      background: var(--p); padding: clamp(80px, 12vh, 130px) clamp(24px, 8vw, 140px);
+      position: relative; overflow: hidden;
+    }
+    .become-bg {
+      position: absolute; right: -20px; bottom: -40px;
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: 280px; line-height: 1;
+      color: rgba(255,255,255,0.03); pointer-events: none; user-select: none;
+    }
+    .become h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(32px, 5vw, 64px); color: var(--w); line-height: 1.1;
+      margin-bottom: 24px; max-width: 700px; position: relative; z-index: 1;
+    }
+    .become h2 em { font-style: normal; color: var(--o); }
+    .become-body {
+      font-size: clamp(15px, 1.5vw, 18px); color: var(--pl); line-height: 1.75;
+      max-width: 620px; margin-bottom: 32px; position: relative; z-index: 1;
+    }
+    .become-points { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; max-width: 560px; position: relative; z-index: 1; }
+    .become-point { display: flex; gap: 14px; align-items: flex-start; }
+    .become-point-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .become-point-text { font-size: clamp(14px, 1.3vw, 16px); color: rgba(255,255,255,0.75); line-height: 1.6; }
+    .become-cta {
+      display: inline-block; background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 14px 28px; border-radius: 6px; transition: background 0.2s;
+      position: relative; z-index: 1;
+    }
+    .become-cta:hover { background: #d4521f; }
+    .become-note { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 14px; position: relative; z-index: 1; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--dark); padding: 22px clamp(24px, 5vw, 80px);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .footer-l { font-family: 'Raleway', sans-serif; font-size: 13px; color: rgba(255,255,255,0.35); }
+    .footer-r { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal.d1 { transition-delay: 0.1s; }
+    .reveal.d2 { transition-delay: 0.2s; }
+    .reveal.d3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOPNAV ══ -->
+<nav class="topnav">
+  <a href="index.html" class="topnav-logo">
+    <svg width="26" height="26" viewBox="0 0 38 38" fill="none">
+      <polygon points="19,1 37,19 19,37 1,19" stroke="#4E2A84" stroke-width="2.5"/>
+      <polygon points="19,8 30,19 19,30 8,19" fill="#4E2A84"/>
+    </svg>
+    <span class="brand">GenAI <em style="font-style:normal;color:#E8602C;">Paradox</em></span>
+  </a>
+  <div class="topnav-links">
+    <a href="index.html#book" class="topnav-link">Book a Session</a>
+    <a href="facilitators.html" class="topnav-link" style="color:var(--p);font-weight:700;">Facilitators</a>
+    <a href="index.html#toolkit" class="topnav-link-btn">Free Toolkit</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">F</div>
+  <div class="hero-eyebrow reveal">GenAI Paradox · Certified Facilitators</div>
+  <h1 class="reveal d1">The people who<br>run the <em>workshop.</em></h1>
+  <p class="hero-sub reveal d2">Every certified facilitator has trained to deliver the GenAI Paradox framework to the same standard. They run the sessions. You make the decisions.</p>
+</section>
+
+<!-- ══ FACILITATORS ══ -->
+<section class="section">
+  <div class="container">
+    <span class="section-label reveal">Certified Facilitators</span>
+    <h2 class="reveal d1">Framework creator<br>and <em>lead facilitator.</em></h2>
+
+    <div class="facilitator-grid">
+
+      <!-- Akos -->
+      <div class="facilitator-card reveal">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;">
+          <div class="facilitator-photo">AT</div>
+          <span class="facilitator-badge creator">Creator</span>
+        </div>
+        <div>
+          <div class="facilitator-name">Akos Tolnai, CCXP</div>
+          <div class="facilitator-title">Creator of the GenAI Paradox Framework · Customer Experience Strategist</div>
+          <p class="facilitator-bio">Akos Tolnai is a Certified Customer Experience Professional with over a decade of experience helping organisations navigate technology-driven change in customer-facing operations. In early 2026 he conducted an independent consumer research study (n=104, Canada and US) examining how AI adoption is reshaping customer expectations around speed and accuracy. The GenAI Paradox framework and the CX GenAI Prioritization Matrix emerged directly from those findings. He presented the research at the CXPA CX Leaders Advance conference in Toronto in April 2026. Akos sets the certification standard for all GenAI Paradox facilitators and oversees the development of the case card library and facilitator handbook.</p>
+          <a href="https://linkedin.com/in/akostolnai" target="_blank" rel="noopener" class="facilitator-cta secondary">LinkedIn</a>
+        </div>
+      </div>
+
+      <!-- Yashar -->
+      <div class="facilitator-card featured reveal d1">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;">
+          <!-- Replace src with assets/yashar-behroozi.jpg once image is placed in genaitriage/assets/ -->
+          <div class="facilitator-photo" id="yashar-photo">YB</div>
+          <span class="facilitator-badge">Lead Facilitator</span>
+        </div>
+        <div>
+          <div class="facilitator-name">Yashar Behroozi</div>
+          <div class="facilitator-title">Lead Certified GenAI Paradox Facilitator · Innovation &amp; Product Strategy Lead, PivotPath</div>
+          <p class="facilitator-bio">Yashar Behroozi is an innovation and product strategy consultant who helps organizations make clear, practical decisions about AI adoption. As Innovation &amp; Product Strategy Lead at PivotPath, he works with teams navigating the gap between AI ambition and customer reality - understanding what is worth building, what is worth buying, and what carries more risk than it is worth. With a background in design thinking, human-centred design, and strategic foresight, Yashar brings a grounded, risk-aware perspective to GenAI: one that starts with real user needs and ends with decisions teams can actually defend. He is particularly focused on helping organizations move beyond AI hype toward adoption that builds, rather than erodes, customer trust.</p>
+          <a href="https://calendar.app.google/WAk81ZjGVvemMHkq9" target="_blank" rel="noopener" class="facilitator-cta">Book a discovery call</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ BECOME A FACILITATOR ══ -->
+<section class="become">
+  <div class="become-bg" aria-hidden="true">→</div>
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="hero-eyebrow reveal" style="color:var(--o);">Certification Programme</div>
+    <h2 class="reveal d1">Become a certified<br><em>GenAI Paradox</em> facilitator.</h2>
+    <p class="become-body reveal d2">The certification is designed for CX consultants, AI advisors, and organisational development practitioners who want a research-backed framework they can deliver under their own brand - without building the IP from scratch.</p>
+    <div class="become-points reveal d2">
+      <div class="become-point">
+        <div class="become-point-icon">📋</div>
+        <div class="become-point-text">Original consumer research (n=104) included. You present findings your clients cannot access elsewhere.</div>
+      </div>
+      <div class="become-point">
+        <div class="become-point-icon">🃏</div>
+        <div class="become-point-text">Full case card library - 40 to 50 real-world GenAI deployments, updated continuously. No card-building on your end.</div>
+      </div>
+      <div class="become-point">
+        <div class="become-point-icon">📖</div>
+        <div class="become-point-text">Facilitator handbook, run-of-show guide, and question ladders per card. Walk in prepared.</div>
+      </div>
+      <div class="become-point">
+        <div class="become-point-icon">🏷️</div>
+        <div class="become-point-text">Deliver under your own brand. The certification credential is uniform: Certified GenAI Paradox Facilitator.</div>
+      </div>
+    </div>
+    <a href="mailto:tolnai@abilitymatrix.com?subject=GenAI%20Paradox%20Facilitator%20Certification%20Enquiry" class="become-cta reveal d3">Enquire about certification</a>
+    <p class="become-note reveal d3">A small number of certification spots are available. Enquiries are reviewed personally.</p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="footer-l"><a href="index.html" style="color:rgba(255,255,255,0.35);text-decoration:none;">genaiparadox.com</a> · Certified Facilitators</div>
+  <div class="footer-r">© 2026 Akos Tolnai, CCXP</div>
+</footer>
+
+<script>
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // Swap placeholder for real headshot if image exists
+  const photo = document.getElementById('yashar-photo');
+  if (photo) {
+    const img = new Image();
+    img.onload = () => {
+      photo.innerHTML = '';
+      photo.appendChild(img);
+    };
+    img.src = 'assets/yashar-behroozi.jpg';
+    img.alt = 'Yashar Behroozi';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;';
+  }
+</script>
+</body>
+</html>

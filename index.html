@@ -655,6 +655,62 @@
     }
     [data-uid="a7cc1133d8"] .formkit-submit:hover { background-color: #d4521f !important; }
 
+    /* ── TOPNAV LINKS ── */
+    .topnav-links { display: flex; align-items: center; gap: 4px; }
+    .topnav-link {
+      font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 600;
+      color: var(--pm); text-decoration: none; padding: 6px 10px; border-radius: 4px;
+      transition: color 0.2s; white-space: nowrap;
+    }
+    .topnav-link:hover { color: var(--p); }
+    .topnav-link-btn {
+      font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--w); text-decoration: none;
+      background: var(--o); padding: 6px 14px; border-radius: 4px;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .topnav-link-btn:hover { background: #d4521f; }
+    @media (max-width: 680px) { .topnav-links { display: none; } }
+
+    /* ── FACILITATED WORKSHOP SECTION ── */
+    .facilitated { padding: clamp(80px, 12vh, 120px) 0; background: var(--w); }
+    .workshop-offer-card {
+      background: var(--pxl); border: 2px solid var(--p);
+      border-radius: 16px; padding: clamp(28px, 4vw, 44px);
+      position: sticky; top: 78px; align-self: start;
+    }
+    @media (max-width: 780px) { .workshop-offer-card { position: static; } }
+    .wo-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--o); margin-bottom: 12px;
+    }
+    .wo-title {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(20px, 2.4vw, 26px); color: var(--p); line-height: 1.2; margin-bottom: 20px;
+    }
+    .wo-list { list-style: none; margin-bottom: 24px; border-top: 1px solid var(--pl); padding-top: 16px; }
+    .wo-list li {
+      font-size: clamp(13px, 1.3vw, 15px); color: var(--muted);
+      padding: 8px 0; border-bottom: 1px solid var(--pl);
+      display: flex; gap: 10px; line-height: 1.5;
+    }
+    .wo-list li:last-child { border-bottom: none; }
+    .wo-list li::before { content: '→'; color: var(--p); font-weight: 700; flex-shrink: 0; }
+    .wo-meta { margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+    .wo-meta-item { display: flex; gap: 12px; align-items: flex-start; }
+    .wo-meta-label {
+      font-size: 10px; font-weight: 700; color: var(--pm); letter-spacing: 1px;
+      text-transform: uppercase; flex: 0 0 76px; padding-top: 2px;
+    }
+    .wo-meta-val { font-size: 14px; color: var(--dark); line-height: 1.5; }
+    .wo-cta {
+      display: block; background: var(--o); color: var(--w);
+      font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+      padding: 14px 28px; border-radius: 6px; transition: background 0.2s; text-align: center;
+    }
+    .wo-cta:hover { background: #d4521f; }
+
     /* ── FOOTER ── */
     .footer {
       background: var(--dark); padding: 22px clamp(24px, 5vw, 80px);
@@ -769,9 +825,13 @@
       <polygon points="19,1 37,19 19,37 1,19" stroke="#4E2A84" stroke-width="2.5"/>
       <polygon points="19,8 30,19 19,30 8,19" fill="#4E2A84"/>
     </svg>
-    <span class="brand">CXPA<sup>™</sup></span>
+    <span class="brand">GenAI <em style="font-style:normal;color:var(--o);">Paradox</em></span>
   </div>
-  <div class="topnav-event">CX <span class="accent">Leaders</span> Advance · April 27–29, 2026 · Toronto</div>
+  <div class="topnav-links">
+    <a href="#book" class="topnav-link">Book a Session</a>
+    <a href="facilitators.html" class="topnav-link">Facilitators</a>
+    <a href="#toolkit" class="topnav-link-btn">Free Toolkit</a>
+  </div>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -1370,6 +1430,52 @@
         <div>
           <div class="takeaway-title">Willing adopters are on a trial run</div>
           <div class="takeaway-body">41% said curiosity. Not speed, not trust. They're evaluating you. Score the risk before you build anything customer-facing. One bad answer doesn't just end a session. It ends the relationship, and probably starts a review.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FACILITATED WORKSHOP ══ -->
+<section class="facilitated" id="book">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <span class="section-label reveal">Beyond the Toolkit</span>
+        <h3 class="reveal d1">Bring the framework<br>to your <em>team.</em></h3>
+        <p class="prose reveal d2">The canvas works on its own. But the real value comes from running it live - with your team, your actual initiatives, and a facilitator who knows when a project is being oversold or a risk is being minimised.</p>
+        <p class="prose reveal d3">A facilitated GenAI Paradox session does in half a day what most AI strategy retreats try to do in two. Your team walks in with a list of ideas and walks out with a prioritised pipeline, a shared scoring language, and explicit agreement on what not to build.</p>
+        <div class="insight reveal d4">
+          <p>Every quadrant placement has to survive the room. Projects get accelerated, sequenced, or killed - with data, not politics.</p>
+        </div>
+        <p class="prose reveal d5" style="margin-top:24px;">Delivery inquiries go directly to our certified facilitators. Start with a free 30-minute discovery call.</p>
+      </div>
+      <div class="reveal d2 from-r">
+        <div class="workshop-offer-card">
+          <div class="wo-eyebrow">Facilitated Half-Day Session</div>
+          <div class="wo-title">The GenAI Paradox Workshop</div>
+          <ul class="wo-list">
+            <li>Framework walkthrough grounded in original consumer research (n=104)</li>
+            <li>Live scoring of your team's actual GenAI initiatives</li>
+            <li>Structured group debate on every quadrant placement</li>
+            <li>Facilitator-guided challenge on optimistic assumptions</li>
+            <li>A prioritised pipeline your team owns and can defend</li>
+          </ul>
+          <div class="wo-meta">
+            <div class="wo-meta-item">
+              <div class="wo-meta-label">Format</div>
+              <div class="wo-meta-val">Half-day · In-person or virtual</div>
+            </div>
+            <div class="wo-meta-item">
+              <div class="wo-meta-label">For</div>
+              <div class="wo-meta-val">CX and digital leadership teams navigating GenAI prioritisation</div>
+            </div>
+            <div class="wo-meta-item">
+              <div class="wo-meta-label">By</div>
+              <div class="wo-meta-val"><a href="facilitators.html" style="color:var(--o);font-weight:600;text-decoration:underline;text-underline-offset:3px;">Certified GenAI Paradox Facilitators</a></div>
+            </div>
+          </div>
+          <a href="https://calendar.app.google/WAk81ZjGVvemMHkq9" target="_blank" rel="noopener" class="wo-cta">Book a discovery call</a>
         </div>
       </div>
     </div>
